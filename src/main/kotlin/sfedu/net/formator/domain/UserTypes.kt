@@ -10,9 +10,14 @@ import java.util.UUID
 
 @JvmInline
 value class UserId(val value: UUID) {
+    fun uuidValue() = value
     companion object {
         fun generate() = UserId(UUID.randomUUID())
         fun from(id: UUID) = UserId(id)
+    }
+
+    override fun toString(): String {
+        return "${this::class.simpleName}(id=$value)"
     }
 }
 
@@ -63,6 +68,36 @@ sealed interface EmailError : ValidationError {
     }
     data object InvalidFormat : EmailError {
         override val message = "Invalid email format"
+    }
+}
+
+data class Password private constructor(val value: String) {
+    companion object {
+        fun from(input: String): Either<PasswordError, Password> {
+            return when {
+                input.isBlank() -> PasswordError.Empty.left()
+                input.length < 8 -> PasswordError.TooShort(8).left()
+                input.length > 64 -> PasswordError.TooLong(64).left()
+                !input.matches(Regex("^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d).+$")) ->
+                    PasswordError.WeakPassword.left()
+                else -> Password(input).right()
+            }
+        }
+    }
+}
+
+sealed interface PasswordError : ValidationError {
+    data object Empty : PasswordError {
+        override val message = "Password cannot be empty"
+    }
+    data class TooShort(val min: Int) : PasswordError {
+        override val message = "Password must be at least $min characters"
+    }
+    data class TooLong(val max: Int) : PasswordError {
+        override val message = "Password cannot exceed $max characters"
+    }
+    data object WeakPassword : PasswordError {
+        override val message = "Password must contain at least one uppercase letter, one lowercase letter, and one digit"
     }
 }
 

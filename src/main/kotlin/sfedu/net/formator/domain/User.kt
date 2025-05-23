@@ -7,6 +7,7 @@ class User(
     var username: Username,
     var email: Email,
     var fullName: FullName,
+    var password: String,
     var role: Role,
     val createdAt: OffsetDateTime = OffsetDateTime.now(),
 ) {
@@ -14,13 +15,15 @@ class User(
         fun create(
             username: Username,
             email: Email,
+            password: String,
             fullName: FullName,
             role: Role
         ): User {
-             return User(
+            return User(
                 id = UserId.generate(),
                 username = username,
                 email = email,
+                password = password,
                 fullName = fullName,
                 role = role
             )

@@ -19,16 +19,22 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val header = request.getHeader("Authorization")
-        if (header != null && header.startsWith("Bearer ")) {
-            val token = header.removePrefix("Bearer ")
-            if (jwtTokenProvider.isTokenValid(token)) {
-                val email = jwtTokenProvider.extractEmail(header)
-                val role = jwtTokenProvider.extractRole(header)
-                val authorities = listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
-                val auth = UsernamePasswordAuthenticationToken(email, null, authorities)
-                SecurityContextHolder.getContext().authentication = auth
-            }
+        val header = request.getHeader("Authorization") ?: ""
+
+        if (header.isBlank() || !header.startsWith("Bearer ", ignoreCase = true)) {
+            filterChain.doFilter(request, response)
+            println("Token validated")
+            return
+        }
+
+        val token = header.removePrefix("Bearer ")
+        if (jwtTokenProvider.isTokenValid(token)) {
+            val email = jwtTokenProvider.extractEmail(header)
+            val role = jwtTokenProvider.extractRole(header)
+            val authorities = listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
+            val auth = UsernamePasswordAuthenticationToken(email, null, authorities)
+            SecurityContextHolder.getContext().authentication = auth
+
         }
         filterChain.doFilter(request, response)
     }

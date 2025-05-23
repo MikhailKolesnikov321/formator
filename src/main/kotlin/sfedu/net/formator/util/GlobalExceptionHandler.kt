@@ -15,9 +15,9 @@ class GlobalExceptionHandler {
             .body(mapOf("message" to "Access denied"))
     }
 
-    @ExceptionHandler(AuthenticationException::class)
-    fun handleAuthException(ex: AuthenticationException): ResponseEntity<Map<String, String>> {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body(mapOf("message" to "Authentication failed"))
-    }
+//    @ExceptionHandler(AuthenticationException::class)
+//    fun handleAuthException(ex: AuthenticationException): ResponseEntity<Map<String, String>> {
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//            .body(mapOf("message" to "Authentication failed"))
+//    }
 }

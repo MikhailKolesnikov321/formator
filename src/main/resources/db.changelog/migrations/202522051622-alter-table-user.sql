@@ -4,4 +4,4 @@
 ALTER TABLE
     formator.users
 ADD
-    password TEXT;
+    password TEXT NOT NULL;

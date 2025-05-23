@@ -6,6 +6,7 @@ import arrow.core.right
 import org.springframework.stereotype.Component
 import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.FullName
+import sfedu.net.formator.domain.Password
 import sfedu.net.formator.domain.Role
 import sfedu.net.formator.domain.User
 import sfedu.net.formator.domain.Username
@@ -25,10 +26,10 @@ class CreateUserUseCase(
         password: String,
         role: Role
     ): Either<UserUseCaseError, User> {
-        return if (userRepository.userExists(email)) {
+        return if (userRepository.userExists(email.value)) {
             UserUseCaseError.UserAlreadyExists(email.value).left()
         } else {
-            User.create(username, email, fullName, role).let { user ->
+            User.create(username, email, password, fullName, role).let { user ->
                 userRepository.save(user).right()
             }
         }

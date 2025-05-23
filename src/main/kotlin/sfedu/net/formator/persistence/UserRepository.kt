@@ -10,5 +10,6 @@ interface UserRepository {
     fun findAll(): List<User>
     fun deleteById(id: UserId)
     fun update(user: User): User
-    fun userExists(email: Email): Boolean
+    fun userExists(email: String): Boolean
+    fun findByEmail(email: String): User?
 }

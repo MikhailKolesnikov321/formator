@@ -1,10 +1,8 @@
 package sfedu.net.formator.persistence.mappers
 
-import arrow.core.Either
 import arrow.core.getOrElse
 import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.FullName
-import sfedu.net.formator.domain.NameError
 import sfedu.net.formator.domain.Role
 import sfedu.net.formator.domain.User
 import sfedu.net.formator.domain.UserId
@@ -25,6 +23,7 @@ fun Users.toDomain(): User {
         },
         role = Role.valueOf(role),
         createdAt = createdAt,
+        password = password
     )
 }
 
@@ -36,5 +35,6 @@ fun User.toEntity(): Users {
     user.fullName = this.fullName.getFullName()
     user.username = this.username.value
     user.role = this.role.name
+    user.password = this.password
     return user
 }

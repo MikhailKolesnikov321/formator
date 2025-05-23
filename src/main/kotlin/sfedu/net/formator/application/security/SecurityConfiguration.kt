@@ -10,13 +10,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
-import sfedu.net.formator.persistence.UserRepository
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfiguration(
     private val jwtFilter: JwtFilter,
-    private val userRepository: UserRepository
+    private val authenticationEntryPoint: JwtAuthenticationEntryPoint
 ) {
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -25,21 +24,20 @@ class SecurityConfiguration(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf { disable() }
-
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.STATELESS
             }
-
             authorizeHttpRequests {
                 authorize("/api/v1/auth/**", permitAll)
                 authorize("/api/v1/admin/**", hasRole("ADMIN"))
                 authorize("/api/v1/student/**", hasRole("STUDENT"))
                 authorize(anyRequest, authenticated)
             }
-
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtFilter)
+            exceptionHandling {
+                authenticationEntryPoint = this@SecurityConfiguration.authenticationEntryPoint
+            }
         }
-
         return http.build()
     }
 }

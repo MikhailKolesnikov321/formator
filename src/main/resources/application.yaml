@@ -33,4 +33,4 @@ springdoc:
 
 jwt:
   secret: "neeeeeewwwwwwwwwKeeeeeeeeySecreeeeet"
-  lifeTime: 36000000
+  lifeTime: 300000

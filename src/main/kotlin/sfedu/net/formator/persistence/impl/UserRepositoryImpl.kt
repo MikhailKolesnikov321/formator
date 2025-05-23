@@ -9,6 +9,7 @@ import sfedu.net.formator.generated.tables.Users.USERS
 import sfedu.net.formator.generated.tables.daos.UsersDao
 import sfedu.net.formator.persistence.UserRepository
 import sfedu.net.formator.persistence.mappers.toDomain
+import sfedu.net.formator.generated.tables.pojos.Users
 import sfedu.net.formator.persistence.mappers.toEntity
 
 @Component
@@ -23,6 +24,7 @@ class UserRepositoryImpl(
             .set(USERS.USERNAME, userEntity.username)
             .set(USERS.EMAIL, userEntity.email)
             .set(USERS.FULL_NAME, userEntity.fullName)
+            .set(USERS.PASSWORD, userEntity.password)
             .set(USERS.ROLE, userEntity.role)
             .set(USERS.CREATED_AT, userEntity.createdAt)
             .execute()
@@ -50,6 +52,12 @@ class UserRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override fun userExists(email: Email): Boolean = userDao.fetchByEmail(email.value).isNotEmpty()
+    override fun userExists(email: String): Boolean = userDao.fetchByEmail(email).isNotEmpty()
+
+    override fun findByEmail(email: String): User? {
+        return dslContext.selectFrom(USERS)
+            .where(USERS.EMAIL.eq(email))
+            .fetchOneInto(Users::class.java)?.toDomain()
+    }
 
 }

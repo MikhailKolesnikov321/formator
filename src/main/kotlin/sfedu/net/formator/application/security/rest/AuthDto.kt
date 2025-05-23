@@ -1,11 +1,11 @@
 package sfedu.net.formator.application.security.rest
 
-data class RegisterRequest(
-    val username: String,
+data class AuthRequest(
     val email: String,
-    val fullName: String,
-    val password: String,
-    val role: String
+    val password: String
 )
 
-data class AuthResponse(val token: String)
+data class AuthResponse(
+    val userId: String,
+    val token: String
+)
