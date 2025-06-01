@@ -102,7 +102,7 @@ tasks.register("jooqGenerate") {
                         .withDriver("org.postgresql.Driver")
                         .withUrl("jdbc:postgresql://localhost:5432/formator")
                         .withUser("postgres")
-                        .withPassword("dunice")
+                        .withPassword("postgres")
                 )
                 .withGenerator(
                     Generator()

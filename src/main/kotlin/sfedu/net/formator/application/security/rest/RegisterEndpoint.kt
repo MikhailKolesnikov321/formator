@@ -1,6 +1,7 @@
 package sfedu.net.formator.application.security.rest
 
 import arrow.core.Either.Companion.zipOrAccumulate
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.web.bind.annotation.PostMapping
@@ -25,6 +26,7 @@ class RegisterController(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
 
+    @Operation(summary = "Register endpoint", tags = ["Authorization"])
     @PostMapping("/api/v1/auth/register")
     operator fun invoke(@RequestBody request: RegisterRequest): ResponseEntity<*> {
         return zipOrAccumulate(

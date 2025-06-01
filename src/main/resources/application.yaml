@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8081
   error:
     whitelabel:
       enabled: false
@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/formator
     username: postgres
-    password: dunice
+    password: postgres
     driver-class-name: org.postgresql.Driver
   application:
     name: formator

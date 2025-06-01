@@ -23,12 +23,14 @@ class SecurityConfiguration(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
+
             csrf { disable() }
             sessionManagement {
                 sessionCreationPolicy = SessionCreationPolicy.STATELESS
             }
             authorizeHttpRequests {
                 authorize("/api/v1/auth/**", permitAll)
+                authorize("/**", permitAll)
                 authorize("/api/v1/admin/**", hasRole("ADMIN"))
                 authorize("/api/v1/student/**", hasRole("STUDENT"))
                 authorize(anyRequest, authenticated)

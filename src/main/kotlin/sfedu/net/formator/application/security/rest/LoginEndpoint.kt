@@ -1,6 +1,7 @@
 package sfedu.net.formator.application.security.rest
 
 import arrow.core.Either.Companion.zipOrAccumulate
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,8 +21,9 @@ class AuthEndpoint(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
 
+    @Operation(summary = "Login endpoint", tags = ["Authorization"])
     @PostMapping("/api/v1/auth/login")
-    operator fun invoke(@RequestBody request: AuthRequest): ResponseEntity<*> {
+    operator fun invoke(@RequestBody request: LoginRequest): ResponseEntity<*> {
         return zipOrAccumulate(
             Email.validated(request.email),
             Password.validated(request.password)
@@ -34,7 +36,7 @@ class AuthEndpoint(
                     ifRight = { user ->
                         val token = jwtTokenProvider.generateToken(user.email.value, user.role)
                         ResponseEntity.ok(
-                            AuthResponse(
+                            LoginResponse(
                                 user.id.toString(),
                                 token
                             )
