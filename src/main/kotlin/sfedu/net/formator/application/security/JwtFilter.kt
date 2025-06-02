@@ -23,7 +23,6 @@ class JwtFilter(
 
         if (header.isBlank() || !header.startsWith("Bearer ", ignoreCase = true)) {
             filterChain.doFilter(request, response)
-            println("Token validated")
             return
         }
 
@@ -34,7 +33,6 @@ class JwtFilter(
             val authorities = listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
             val auth = UsernamePasswordAuthenticationToken(email, null, authorities)
             SecurityContextHolder.getContext().authentication = auth
-
         }
         filterChain.doFilter(request, response)
     }

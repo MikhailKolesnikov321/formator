@@ -8,6 +8,10 @@ interface ValidationError {
     val message: String
 }
 
+class SimpleValidationError(
+    override val message: String,
+) : ValidationError
+
 fun restBusinessError(body: Any): ResponseEntity<*> =
     ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(body)
 

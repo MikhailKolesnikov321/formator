@@ -1,6 +1,5 @@
 package sfedu.net.formator.persistence
 
-import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.User
 import sfedu.net.formator.domain.UserId
 

@@ -2,14 +2,13 @@ package sfedu.net.formator.persistence.impl
 
 import org.jooq.DSLContext
 import org.springframework.stereotype.Component
-import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.User
 import sfedu.net.formator.domain.UserId
 import sfedu.net.formator.generated.tables.Users.USERS
 import sfedu.net.formator.generated.tables.daos.UsersDao
+import sfedu.net.formator.generated.tables.pojos.Users
 import sfedu.net.formator.persistence.UserRepository
 import sfedu.net.formator.persistence.mappers.toDomain
-import sfedu.net.formator.generated.tables.pojos.Users
 import sfedu.net.formator.persistence.mappers.toEntity
 
 @Component
@@ -19,25 +18,24 @@ class UserRepositoryImpl(
 ) : UserRepository {
     override fun save(user: User): User {
         val userEntity = user.toEntity()
-        dslContext.insertInto(USERS)
-            .set(USERS.ID, userEntity.id)
-            .set(USERS.USERNAME, userEntity.username)
-            .set(USERS.EMAIL, userEntity.email)
-            .set(USERS.FULL_NAME, userEntity.fullName)
-            .set(USERS.PASSWORD, userEntity.password)
-            .set(USERS.ROLE, userEntity.role)
-            .set(USERS.CREATED_AT, userEntity.createdAt)
-            .execute()
+        dslContext.transaction { ctx ->
+            ctx.dsl()
+                .insertInto(USERS)
+                .set(USERS.ID, userEntity.id)
+                .set(USERS.USERNAME, userEntity.username)
+                .set(USERS.EMAIL, userEntity.email)
+                .set(USERS.FULL_NAME, userEntity.fullName)
+                .set(USERS.PASSWORD, userEntity.password)
+                .set(USERS.ROLE, userEntity.role)
+                .set(USERS.CREATED_AT, userEntity.createdAt)
+                .execute()
+        }
+
         return user
     }
 
     override fun findById(id: UserId): User? {
-        val user = userDao.fetchOptionalById(id.value)
-        return if (user.isPresent) {
-            user.get().toDomain()
-        } else {
-            null
-        }
+        return userDao.fetchOptionalById(id.value).map { it.toDomain() }.orElse(null)
     }
 
     override fun findAll(): List<User> {

@@ -2,7 +2,7 @@ package sfedu.net.formator.domain
 
 import java.time.OffsetDateTime
 
-class User(
+data class User(
     var id: UserId,
     var username: Username,
     var email: Email,
