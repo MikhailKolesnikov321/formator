@@ -37,7 +37,7 @@ class TaskRepositoryImpl(
     override fun saveTaskAndUser(taskId: TaskId, userId: UserId) {
         dslContext.transaction { ctx ->
             ctx.dsl()
-                .insertInto(TASKS)
+                .insertInto(TASK_USER)
                 .set(TASK_USER.USER_ID, userId.uuidValue())
                 .set(TASK_USER.TASK_ID, taskId.uuidValue())
                 .onDuplicateKeyIgnore()

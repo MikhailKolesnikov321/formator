@@ -37,7 +37,7 @@ class AuthEndpoint(
                         val token = jwtTokenProvider.generateToken(user.email.value, user.role)
                         ResponseEntity.ok(
                             LoginResponse(
-                                user.id.toString(),
+                                user.id.uuidValue(),
                                 token
                             )
                         )

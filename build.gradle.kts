@@ -83,7 +83,7 @@ liquibase {
             "changeLogFile" to "src/main/resources/db.changelog/main.xml",
             "url" to "jdbc:postgresql://localhost:5432/formator",
             "username" to "postgres",
-            "password" to "dunice",
+            "password" to "postgres",
             "classpath" to "src/main/resources"
         )
     }
@@ -102,7 +102,7 @@ tasks.register("jooqGenerate") {
                         .withDriver("org.postgresql.Driver")
                         .withUrl("jdbc:postgresql://localhost:5432/formator")
                         .withUser("postgres")
-                        .withPassword("dunice")
+                        .withPassword("postgres")
                 )
                 .withGenerator(
                     Generator()
