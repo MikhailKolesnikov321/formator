@@ -16,6 +16,7 @@ class JwtAuthenticationEntryPoint : AuthenticationEntryPoint {
     ) {
         response.status = HttpStatus.UNAUTHORIZED.value()
         response.contentType = "application/json"
+        println("ebay!!!!!!!!!!!!!!!!!")
         response.writer.write("""{ "message": "Authentication required or token invalid" }""")
     }
 }

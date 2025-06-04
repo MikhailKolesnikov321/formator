@@ -16,6 +16,8 @@ CREATE TABLE IF NOT EXISTS formator.tasks (
 CREATE TABLE IF NOT EXISTS formator.task_user (
     user_id UUID NOT NULL,
     task_id UUID NOT NULL,
+    task_order INTEGER,
+    answer    TEXT,
     PRIMARY KEY (user_id, task_id),
     FOREIGN KEY (task_id) REFERENCES formator.tasks (id),
     FOREIGN KEY (user_id) REFERENCES formator.users (id)

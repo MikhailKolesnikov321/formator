@@ -8,7 +8,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/formator
     username: postgres
-    password: postgres
+    password: dunice
     driver-class-name: org.postgresql.Driver
   application:
     name: formator

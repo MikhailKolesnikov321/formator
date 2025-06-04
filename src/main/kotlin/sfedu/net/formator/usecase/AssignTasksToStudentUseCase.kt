@@ -18,7 +18,7 @@ class AssignTasksToStudentUseCase(
 
     operator fun invoke(
         studentId: UUID,
-        taskIds: List<UUID>
+        taskIds: Set<UUID>
     ): Either<AssignTasksUseCaseError, Unit> {
         if (userRepository.findById(UserId(studentId)) == null) {
             return AssignTasksUseCaseError.StudentNotFound("User with id: $studentId not found").left()
@@ -29,8 +29,12 @@ class AssignTasksToStudentUseCase(
                 return AssignTasksUseCaseError.TasksNotFound("Task with id: $it not found").left()
             }
         }
-        taskIds.forEach {
-            taskRepository.saveTaskAndUser(TaskId(it), UserId(studentId))
+        val taskToOrder: Map<TaskId, Int> = taskIds
+            .map { TaskId(it) }
+            .withIndex()
+            .associate { (index, taskId) -> taskId to index + 1 }
+        taskToOrder.forEach {
+            taskRepository.saveTaskAndUser(it.key, UserId(studentId), it.value, null)
         }
         return Unit.right()
     }

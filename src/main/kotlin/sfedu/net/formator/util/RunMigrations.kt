@@ -10,7 +10,7 @@ fun runLiquibaseMigrations() {
     val changelogFile = "db.changelog/main.xml"
     val dbUrl = "jdbc:postgresql://localhost:5432/formator"
     val username = "postgres"
-    val password = "postgres"
+    val password = "dunice"
 
     val dataSource = PGSimpleDataSource().apply {
         setURL(dbUrl)

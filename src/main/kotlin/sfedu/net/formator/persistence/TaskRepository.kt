@@ -6,7 +6,7 @@ import sfedu.net.formator.domain.UserId
 
 interface TaskRepository {
     fun saveTask(task: Task): Task
-    fun saveTaskAndUser(taskId: TaskId, userId: UserId)
+    fun saveTaskAndUser(taskId: TaskId, userId: UserId, order: Int?, answer: String?)
     fun findById(id: TaskId): Task?
     fun findAll(): List<Task>
     fun deleteById(id: TaskId)

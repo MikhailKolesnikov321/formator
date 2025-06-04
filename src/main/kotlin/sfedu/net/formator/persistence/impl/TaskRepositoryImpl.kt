@@ -34,13 +34,16 @@ class TaskRepositoryImpl(
         return task
     }
 
-    override fun saveTaskAndUser(taskId: TaskId, userId: UserId) {
+    override fun saveTaskAndUser(taskId: TaskId, userId: UserId, order: Int?, answer: String?) {
         dslContext.transaction { ctx ->
             ctx.dsl()
                 .insertInto(TASK_USER)
                 .set(TASK_USER.USER_ID, userId.uuidValue())
                 .set(TASK_USER.TASK_ID, taskId.uuidValue())
-                .onDuplicateKeyIgnore()
+                .set(TASK_USER.TASK_ORDER, order)
+                .onConflict(TASK_USER.USER_ID, TASK_USER.TASK_ID)
+                .doUpdate()
+                .set(TASK_USER.ANSWER, answer)
                 .execute()
         }
     }
