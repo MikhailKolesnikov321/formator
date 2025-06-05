@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS formator.users(
     id UUID PRIMARY KEY NOT NULL,
-    username TEXT NOT NULL,
+    organization TEXT NOT NULL,
     email TEXT NOT NULL,
     full_name TEXT NOT NULL,
     role TEXT NOT NULL,

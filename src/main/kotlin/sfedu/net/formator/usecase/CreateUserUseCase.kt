@@ -6,9 +6,9 @@ import arrow.core.right
 import org.springframework.stereotype.Component
 import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.FullName
+import sfedu.net.formator.domain.Organization
 import sfedu.net.formator.domain.Role
 import sfedu.net.formator.domain.User
-import sfedu.net.formator.domain.Username
 import sfedu.net.formator.persistence.UserRepository
 
 @Component
@@ -16,7 +16,7 @@ class CreateUserUseCase(
     private val userRepository: UserRepository,
 ) {
     operator fun invoke(
-        username: Username,
+        username: Organization,
         email: Email,
         fullName: FullName,
         password: String,

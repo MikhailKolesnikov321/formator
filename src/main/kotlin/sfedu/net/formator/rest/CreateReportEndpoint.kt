@@ -24,7 +24,7 @@ class CreateReportEndpoint(
     @PostMapping("/api/v1/student/report")
     operator fun invoke(@RequestBody request: CreateReportRequest): ResponseEntity<*> {
         val supervisionId = currentUserProvider.getCurrentUserId()
-        return useCase(UserId(request.id)).fold(
+        return useCase(supervisionId, UserId(request.id)).fold(
             ifLeft = { it.toErrorResponse() },
             ifRight = {
                 ResponseEntity.ok()
@@ -41,7 +41,8 @@ class CreateReportEndpoint(
 
 enum class CreateReportErrorType {
     STUDENT_NOT_FOUND,
-    TASK_NOT_FOUND
+    TASK_NOT_FOUND,
+    ORGANIZATION_SUPERVISOR_NOT_FOUND
 }
 
 data class CreateReportErrorResponse(
@@ -63,6 +64,13 @@ fun CreateReportUseCaseError.toErrorResponse(): ResponseEntity<*> = when (this) 
         restBusinessError(
             CreateReportErrorResponse(
                 CreateReportErrorType.TASK_NOT_FOUND,
+                message
+            )
+        )
+    is CreateReportUseCaseError.OrganizationSupervisorNotFound ->
+        restBusinessError(
+            CreateReportErrorResponse(
+                CreateReportErrorType.ORGANIZATION_SUPERVISOR_NOT_FOUND,
                 message
             )
         )

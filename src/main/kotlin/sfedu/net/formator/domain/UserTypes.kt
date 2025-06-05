@@ -21,15 +21,14 @@ value class UserId(val value: UUID) {
     }
 }
 
-data class Username private constructor(val value: String) {
+data class Organization private constructor(val value: String) {
     companion object {
-        fun from(input: String): Either<UserError, Username> {
+        fun from(input: String): Either<UserError, Organization> {
             return when {
                 input.isBlank() -> UserError.Empty.left()
                 input.length < 3 -> UserError.TooShort(3).left()
                 input.length > 50 -> UserError.TooLong(50).left()
-                !input.matches(Regex("^[a-zA-Z0-9_.-]+\$")) -> UserError.InvalidCharacters.left()
-                else -> Username(input).right()
+                else -> Organization(input).right()
             }
         }
     }

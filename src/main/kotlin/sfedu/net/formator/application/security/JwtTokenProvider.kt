@@ -47,7 +47,7 @@ class JwtTokenProvider(
     }
 
     fun extractId(token: String): String {
-        return parseClaims(token).id
+        return parseClaims(token).subject
     }
 
     fun extractRole(token: String): Role {

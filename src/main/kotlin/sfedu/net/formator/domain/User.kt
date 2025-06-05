@@ -4,7 +4,7 @@ import java.time.OffsetDateTime
 
 data class User(
     var id: UserId,
-    var username: Username,
+    var organization: Organization,
     var email: Email,
     var fullName: FullName,
     var password: String,
@@ -13,7 +13,7 @@ data class User(
 ) {
     companion object {
         fun create(
-            username: Username,
+            organization: Organization,
             email: Email,
             password: String,
             fullName: FullName,
@@ -21,7 +21,7 @@ data class User(
         ): User {
             return User(
                 id = UserId.generate(),
-                username = username,
+                organization = organization,
                 email = email,
                 password = password,
                 fullName = fullName,

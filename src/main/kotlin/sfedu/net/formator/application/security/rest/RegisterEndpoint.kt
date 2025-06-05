@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RestController
 import sfedu.net.formator.application.security.JwtTokenProvider
 import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.FullName
+import sfedu.net.formator.domain.Organization
 import sfedu.net.formator.domain.Password
 import sfedu.net.formator.domain.Role
-import sfedu.net.formator.domain.Username
 import sfedu.net.formator.rest.validation.validated
 import sfedu.net.formator.usecase.CreateUserUseCase
 import sfedu.net.formator.usecase.UserUseCaseError
@@ -30,7 +30,7 @@ class RegisterController(
     @PostMapping("/api/v1/auth/register")
     operator fun invoke(@RequestBody request: RegisterRequest): ResponseEntity<*> {
         return zipOrAccumulate(
-            Username.validated(request.username),
+            Organization.validated(request.organization),
             Email.validated(request.email),
             FullName.validated(request.fullName),
             Password.validated(request.password)
@@ -48,7 +48,7 @@ class RegisterController(
             ifRight = { result ->
                 result.fold(
                     ifRight = { user ->
-                        val token = jwtTokenProvider.generateToken(user.email.value, user.role)
+                        val token = jwtTokenProvider.generateToken(user.id.uuidValue().toString(), user.role)
                         ResponseEntity.ok(
                             RegisterResponse(
                                 user.id.uuidValue(),

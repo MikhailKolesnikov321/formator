@@ -4,11 +4,11 @@ import arrow.core.EitherNel
 import arrow.core.toEitherNel
 import sfedu.net.formator.domain.Email
 import sfedu.net.formator.domain.FullName
+import sfedu.net.formator.domain.Organization
 import sfedu.net.formator.domain.Password
-import sfedu.net.formator.domain.Username
 import sfedu.net.formator.util.ValidationError
 
-fun Username.Companion.validated(value: String): EitherNel<ValidationError, Username> {
+fun Organization.Companion.validated(value: String): EitherNel<ValidationError, Organization> {
     return from(value).mapLeft { it }.toEitherNel()
 }
 

@@ -34,7 +34,7 @@ class AuthEndpoint(
             ifRight = { result ->
                 result.fold(
                     ifRight = { user ->
-                        val token = jwtTokenProvider.generateToken(user.email.value, user.role)
+                        val token = jwtTokenProvider.generateToken(user.id.uuidValue().toString(), user.role)
                         ResponseEntity.ok(
                             LoginResponse(
                                 user.id.uuidValue(),

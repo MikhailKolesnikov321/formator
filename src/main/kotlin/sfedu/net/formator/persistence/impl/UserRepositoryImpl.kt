@@ -10,6 +10,7 @@ import sfedu.net.formator.generated.tables.pojos.Users
 import sfedu.net.formator.persistence.UserRepository
 import sfedu.net.formator.persistence.mappers.toDomain
 import sfedu.net.formator.persistence.mappers.toEntity
+import java.util.*
 
 @Component
 class UserRepositoryImpl(
@@ -22,7 +23,7 @@ class UserRepositoryImpl(
             ctx.dsl()
                 .insertInto(USERS)
                 .set(USERS.ID, userEntity.id)
-                .set(USERS.USERNAME, userEntity.username)
+                .set(USERS.ORGANIZATION, userEntity.organization)
                 .set(USERS.EMAIL, userEntity.email)
                 .set(USERS.FULL_NAME, userEntity.fullName)
                 .set(USERS.PASSWORD, userEntity.password)
@@ -58,4 +59,20 @@ class UserRepositoryImpl(
             .fetchOneInto(Users::class.java)?.toDomain()
     }
 
+    override fun findStudentsBySupervisor(supervisorId: UserId): List<User> {
+        val organization = dslContext
+            .select(USERS.ORGANIZATION)
+            .from(USERS)
+            .where(USERS.ID.eq(supervisorId.uuidValue()))
+            .fetchOne(USERS.ORGANIZATION)
+
+        return dslContext
+            .selectFrom(USERS)
+            .where(
+                USERS.ORGANIZATION.eq(organization)
+                    .and(USERS.ROLE.eq("STUDENT"))
+            )
+            .fetchInto(Users::class.java)
+            .map { it.toDomain() }
+    }
 }

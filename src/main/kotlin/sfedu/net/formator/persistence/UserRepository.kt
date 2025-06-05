@@ -11,4 +11,5 @@ interface UserRepository {
     fun update(user: User): User
     fun userExists(email: String): Boolean
     fun findByEmail(email: String): User?
+    fun findStudentsBySupervisor(supervisorId: UserId): List<User>
 }
