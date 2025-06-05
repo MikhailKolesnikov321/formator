@@ -46,6 +46,10 @@ class JwtTokenProvider(
         return parseClaims(token).subject
     }
 
+    fun extractId(token: String): String {
+        return parseClaims(token).id
+    }
+
     fun extractRole(token: String): Role {
         val claims = parseClaims(token)
         val roleStr = claims.get("role", String::class.java)

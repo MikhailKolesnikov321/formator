@@ -26,6 +26,7 @@ class CreateTaskUseCase(
         val task = Task.create(
             title = title,
             description = description,
+            null,
             startAt = startAt,
             endAt = endAt
         )

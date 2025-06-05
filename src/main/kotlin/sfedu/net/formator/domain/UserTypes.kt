@@ -102,16 +102,19 @@ sealed interface PasswordError : ValidationError {
 }
 
 data class FullName private constructor(
+    val lastName: String,
     val firstName: String,
-    val lastName: String
+    val middleName: String?
 ) {
     companion object {
-        fun from(first: String, last: String): Either<NameError, FullName> {
-            return validateNamePart(first, "First name")
-                .flatMap { firstName ->
-                    validateNamePart(last, "Last name")
-                        .map { lastName -> FullName(firstName, lastName) }
+        fun from(last: String, first: String, middle: String?): Either<NameError, FullName> {
+            return validateNamePart(last, "Фамилия").flatMap { validLast ->
+                validateNamePart(first, "Имя").flatMap { validFirst ->
+                    validateOptionalNamePart(middle, "Отчество").map { validMiddle ->
+                        FullName(validLast, validFirst, validMiddle)
+                    }
                 }
+            }
         }
 
         private fun validateNamePart(value: String, field: String): Either<NameError, String> {
@@ -123,20 +126,32 @@ data class FullName private constructor(
             }
         }
 
+        private fun validateOptionalNamePart(value: String?, field: String): Either<NameError, String?> {
+            return if (value.isNullOrBlank()) {
+                null.right()
+            } else {
+                validateNamePart(value, field).map { it }
+            }
+        }
+
         fun aggregateName(full: String): Either<NameError, FullName> {
             val parts = full.trim().split(Regex("\\s+"))
-            if (parts.size < 2) {
-                return NameError.InvalidCharacters("Expected format: 'First Last' or 'Last First'").left()
+            return when (parts.size) {
+                2 -> from(parts[0], parts[1], null)
+                3 -> from(parts[0], parts[1], parts[2])
+                else -> NameError.InvalidCharacters("Ожидается формат: 'Фамилия Имя' или 'Фамилия Имя Отчество'").left()
             }
-
-            val first = parts[0]
-            val last = parts.subList(1, parts.size).joinToString(" ")
-
-            return from(first, last)
         }
     }
 
-    fun getFullName(): String = "$lastName $firstName"
+    fun getFullName(): String =
+        listOfNotNull(lastName, firstName, middleName).joinToString(" ")
+
+    fun getShortName(): String {
+        val firstInitial = firstName.firstOrNull()?.uppercaseChar()?.toString() ?: ""
+        val middleInitial = middleName?.firstOrNull()?.uppercaseChar()?.toString() ?: ""
+        return "$lastName ${firstInitial}.${middleInitial}."
+    }
 }
 
 sealed interface NameError : ValidationError {

@@ -1,6 +1,7 @@
 package sfedu.net.formator.rest
 
 import arrow.core.Either.Companion.zipOrAccumulate
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,6 +21,8 @@ import sfedu.net.formator.util.toInvalidParamsBadRequest
 class CreateTaskEndpoint(
     private val useCase: CreateTaskUseCase
 ) {
+
+    @Operation(summary = "Create task endpoint", tags = ["Task"])
     @PostMapping("/api/v1/organization/task/create")
     operator fun invoke(@RequestBody request: CreateTaskRequest): ResponseEntity<*> {
         return zipOrAccumulate(

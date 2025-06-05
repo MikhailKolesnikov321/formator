@@ -1,5 +1,6 @@
 package sfedu.net.formator.rest
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,6 +17,7 @@ class AddAnswerEndpoint(
     private val useCase: AddAnswerUseCase
 ) {
 
+    @Operation(summary = "Add answer endpoint", tags = ["Task"])
     @PostMapping("/api/v1/organization/task/answer")
     operator fun invoke(@RequestBody request: AddAnswerRequest): ResponseEntity<*> {
         return useCase(

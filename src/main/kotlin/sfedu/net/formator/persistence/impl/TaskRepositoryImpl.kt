@@ -5,12 +5,14 @@ import org.springframework.stereotype.Component
 import sfedu.net.formator.domain.Task
 import sfedu.net.formator.domain.TaskId
 import sfedu.net.formator.domain.UserId
-import sfedu.net.formator.generated.tables.Tasks.TASKS
 import sfedu.net.formator.generated.tables.TaskUser.TASK_USER
+import sfedu.net.formator.generated.tables.Tasks.TASKS
 import sfedu.net.formator.generated.tables.daos.TasksDao
+import sfedu.net.formator.generated.tables.pojos.Tasks
 import sfedu.net.formator.persistence.TaskRepository
 import sfedu.net.formator.persistence.mappers.toDomain
 import sfedu.net.formator.persistence.mappers.toEntity
+import java.util.*
 
 @Component
 class TaskRepositoryImpl(
@@ -71,4 +73,37 @@ class TaskRepositoryImpl(
             .execute()
         return task
     }
+
+    override fun findAllAnswerForUser(userId: UserId): List<TaskView> {
+        return dslContext
+            .select(
+                TASKS.ID,
+                TASKS.TITLE,
+                TASKS.DESCRIPTION,
+                TASK_USER.ANSWER,
+                TASK_USER.TASK_ORDER
+            )
+            .from(TASK_USER)
+            .join(TASKS).on(TASK_USER.TASK_ID.eq(TASKS.ID))
+            .where(TASK_USER.USER_ID.eq(userId.uuidValue()))
+            .orderBy(TASK_USER.TASK_ORDER.asc())
+            .fetch()
+            .map { record ->
+                TaskView(
+                    id = UUID.fromString(record[TASKS.ID].toString()),
+                    title = record[TASKS.TITLE].toString(),
+                    description = record[TASKS.DESCRIPTION].toString(),
+                    answer = record[TASK_USER.ANSWER].toString(),
+                    order = record[TASK_USER.TASK_ORDER]
+                )
+            }
+    }
 }
+
+data class TaskView(
+    val id: UUID,
+    val title: String,
+    val description: String,
+    val answer: String,
+    val order: Int
+)

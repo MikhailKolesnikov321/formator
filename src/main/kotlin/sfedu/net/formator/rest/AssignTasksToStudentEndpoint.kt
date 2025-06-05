@@ -1,6 +1,8 @@
 package sfedu.net.formator.rest
 
+import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
@@ -13,8 +15,11 @@ import sfedu.net.formator.util.restBusinessError
 class AssignTasksToStudentEndpoint(
     private val useCase: AssignTasksToStudentUseCase
 ) {
+
+    @Operation(summary = "Assign task to student endpoint", tags = ["Task"])
     @PostMapping("/api/v1/organization/task/assign")
     operator fun invoke(@RequestBody request: AssignTasksRequest): ResponseEntity<*> {
+        val organizationId =
         return useCase(request.studentId, request.taskIds).fold(
             ifLeft = { it.toTaskErrorResponse() },
             ifRight = {

@@ -32,11 +32,14 @@ class SecurityConfiguration(
                 sessionCreationPolicy = SessionCreationPolicy.STATELESS
             }
             authorizeHttpRequests {
+//                authorize("/**", permitAll)
+//                authorize("/swagger-ui/**", permitAll)
+//                authorize("/v3/api-docs*/**", permitAll)
                 authorize("/api/v1/auth/**", permitAll)
                 authorize("/api/v1/admin/**", hasRole("ADMIN"))
                 authorize("/api/v1/student/**", hasRole("STUDENT"))
                 authorize("/api/v1/organization/**", hasRole("ORGANIZATION_SUPERVISOR"))
-                authorize(anyRequest, authenticated)
+                authorize(anyRequest, permitAll)
             }
             addFilterBefore<UsernamePasswordAuthenticationFilter>(jwtFilter)
             exceptionHandling {

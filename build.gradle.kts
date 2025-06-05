@@ -46,6 +46,8 @@ dependencies {
     liquibaseRuntime("org.liquibase:liquibase-core:4.31.0")
     liquibaseRuntime("org.postgresql:postgresql:42.6.0")
     liquibaseRuntime("info.picocli:picocli:4.6.1")
+    implementation("org.apache.poi:poi:5.4.0")
+    implementation("org.apache.poi:poi-ooxml:5.4.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
     implementation("org.liquibase:liquibase-core:4.31.0")
     implementation("io.arrow-kt:arrow-core:1.2.4")

@@ -28,11 +28,12 @@ class JwtFilter(
 
         val token = header.removePrefix("Bearer ")
         if (jwtTokenProvider.isTokenValid(token)) {
-            val email = jwtTokenProvider.extractEmail(header)
+            val userId = jwtTokenProvider.extractId(header)
             val role = jwtTokenProvider.extractRole(header)
             val authorities = listOf(SimpleGrantedAuthority("ROLE_${role.name}"))
-            val auth = UsernamePasswordAuthenticationToken(email, null, authorities)
+            val auth = UsernamePasswordAuthenticationToken(userId, null, authorities)
             SecurityContextHolder.getContext().authentication = auth
+
         }
         filterChain.doFilter(request, response)
     }
